@@ -3,9 +3,11 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "app_timer.h"
 #include "nrfx_lpcomp.h"
 #include "nrf_lpcomp.h"
 
+#include "microbit_v2.h"
 #include "heartbeat.h"
 
 static void lpcomp_event_handler(nrf_lpcomp_event_t event) {
@@ -29,11 +31,12 @@ void heartbeat_setup() {
             .interrupt_priority = 1
     };
 
+    // enable the LPCOMP peripheral and interrupts
+    nrfx_lpcomp_enable();
+
     // initialize the LPCOMP driver
     nrfx_lpcomp_init(&p_config_, lpcomp_event_handler);
 
-    // enable the LPCOMP peripheral and interrupts
-    nrfx_lpcomp_enable();
 }
 
 

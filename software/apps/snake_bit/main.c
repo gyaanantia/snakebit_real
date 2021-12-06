@@ -10,6 +10,8 @@
 
 #include "nrf_delay.h"
 #include "nrf_twi_mngr.h"
+#include "nrfx_lpcomp.h"
+#include "nrf_lpcomp.h"
 
 #include "microbit_v2.h"
 #include "lsm303agr.h"
