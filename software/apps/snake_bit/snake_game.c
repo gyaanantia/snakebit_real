@@ -1,5 +1,6 @@
 
 #include <stdbool.h>
+#include "oled.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -7,8 +8,6 @@
 #include "nrf_delay.h"
 #include "app_timer.h"
 #include "microbit_v2.h"
-#include "oled.h"
-
 
 APP_TIMER_DEF(timer1);
 
@@ -31,26 +30,26 @@ struct Node* tail;
 
 void cur_direction(){
   if( (direction == 1) || (direction == 2) || (direction ==0)){
-    if(!nrf_gpio_pin_read(14)){
+    if(!gpio_read(14)){
        direction = 3; // turns right
     }
-    if(!nrf_gpio_pin_read(23)){
+    if(!gpio_read(23)){
        direction =4; // turns left
     }
   }
     else if(direction == 3){
-      if(!nrf_gpio_pin_read(14)){
+      if(!gpio_read(14)){
          direction = 1; // up
       }
-      if(!nrf_gpio_pin_read(23)){
+      if(!gpio_read(23)){
          direction = 2; //down
       }
     }
       else if(direction == 4){
-        if(!nrf_gpio_pin_read(14)){
+        if(!gpio_read(14)){
            direction = 2; //down
         }
-        if(!nrf_gpio_pin_read(23)){
+        if(!gpio_read(23)){
            direction = 1;// up
         }
       }
@@ -184,12 +183,18 @@ void draw_board(){
 void main(){
   new_game();
   while(1){
-  if ((!nrf_gpio_pin_read(14)) | (!nrf_gpio_pin_read(23))){ // can maybe replace this with an interupt
+  if ((!gpio_read(14)) | (!gpio_read(23))){ // can maybe replace this with an interupt
   cur_direction();
   }
   lose();
   apple_eat();
   if (lost){
+  struct Node* temp = head;
+  while(temp != NULL){
+    struct Node* other = temp->next;
+    free(temp); 
+    temp = other;
+   }
   printf("score: %i", score);
   nrf_delay_ms(30);
   new_game();
