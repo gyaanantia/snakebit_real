@@ -1,6 +1,8 @@
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib. h>
 #include "nrf_gpio.h"
 #include "nrf_delay.h"
 #include "app_timer.h"
@@ -8,11 +10,11 @@
 
 APP_TIMER_DEF(timer1);
 
-typedef int score, apple_x, apple_y, direction;
+typedef uint_8_t score, apple_x, apple_y, direction;
 typedef bool apple_eaten, lost;
 
 typedef struct Node{
-  uint_8 x, y;
+  uint_8_t x, y;
   struct Node* next;
   struct Node* prev;
 };
@@ -67,7 +69,7 @@ void moving(){
  if(direction == 4){
    new_x =  head->x -1;
  }
- struct Node* new_node = (Node*)malloc(sizeof(struct Node));
+ struct Node* new_node = malloc(sizeof(struct Node));;
  new_node->x = new_x;
  new_node->y = new_y;
  new_node->next = head;
@@ -108,7 +110,7 @@ if(head->y <= 0 ||  head->y >=31){
 if(head->x<=0 ||  head->y>= 63){
    lost = true;
 }
- *Node temp = head->next;
+ Node* temp = head->next;
  while(temp!= tail ){
     if head->x == temp->x {
       if( head->y == temp->y){
@@ -164,7 +166,7 @@ void new_game(){
 
 }
 void draw_board(){
-  struct *Node temp = head->next;
+  struct Node* temp = head->next;
   while(temp!= tail ){
     draw(temp->x, temp->y); // need the draw function
     temp = temp -> next;
@@ -178,7 +180,7 @@ void main(){
   app_
   while(1){
   if( !gpio_read(14) | !gpio_read(23)){ // can maybe replace this with an interupt
-  curr_direction();
+  cur_direction();
   }
   lost();
   apple_eaten();
@@ -194,7 +196,7 @@ if (apple_eaten()){
 app_timer_init(); // this has to go somewhere else probably in the baord init or something
 app_timer_create(&timer1, APP_TIMER_MODE_REPEATED, draw_board);
 app_timer_start(my_timer_1, 32768/500, NULL);
-int heart_beat_val = 75; 
+int heart_beat_val = 75;
 delay 1000/heart_beat_val; // this is def wrong but we'll get back to this
 }
 }
