@@ -235,6 +235,21 @@ void pixel(int x, int y)
     screenbuffer[index] |= (1 << (y % 8));
 }
 
+void clear_pixel(int x, int y)
+{
+
+    if (x < 0 || x >= 64 || y < 0 || y >= 48) {
+        return;
+    }
+
+    x += 0x20;
+    y += 0x10;
+
+    int index = (int)(x + floor(y / 8) * LCDWIDTH_);
+
+    screenbuffer[index] &= (0 << (y % 8));
+}
+
 void print_screen() {
     for (int i = 0; i < (8 * 128); i++) {
         printf("%x", screenbuffer[i]);

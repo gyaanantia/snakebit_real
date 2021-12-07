@@ -54,4 +54,6 @@ void display(void);
 
 void pixel(int x, int y);
 
+void clear_pixel(int x, int y);
+
 void print_screen();

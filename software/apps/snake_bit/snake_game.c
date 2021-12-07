@@ -8,6 +8,8 @@
 #include "nrf_delay.h"
 #include "app_timer.h"
 #include "microbit_v2.h"
+#include "nrfx_gpiote.h"
+#include "heartbeat.h"
 
 
 NRF_TWI_MNGR_DEF(twi_mngr_instance, 1, 0);
@@ -31,32 +33,8 @@ struct Node* tail = NULL;
 //} List;
 
 // checks what buttons are pushed and changes global variable direction based on button push and  direction
-void cur_direction(){
-    if( (direction == 1) || (direction == 2) || (direction ==0)) {
-        if(!nrf_gpio_pin_read(14)){
-            direction = 3; // turns right
-        }
-    if(!nrf_gpio_pin_read(23)) {
-        direction = 4; // turns left
-    }
-    } else if(direction == 3) {
-        if(!nrf_gpio_pin_read(14)){
-            direction = 1; // up
-        }
-        if(!nrf_gpio_pin_read(23)){
-            direction = 2; //down
-        }
-    } else if(direction == 4) {
-            if(!nrf_gpio_pin_read(14)){
-                direction = 2; //down
-            }
-            if(!nrf_gpio_pin_read(23)){
-                direction = 1;// up
-            }
-        }
-}
 
-void moving()
+void move()
 {
     uint8_t new_x = head->x;
     uint8_t new_y = head->y;
@@ -84,15 +62,17 @@ void moving()
 //    }
     head = new_node;
     if(!apple_eaten){
-       struct Node* temp =  tail;
-       tail =  tail->prev;
-       tail->next = NULL;
-       free(temp);
+        clear_pixel(tail->x, tail->y);
+        struct Node* temp =  tail;
+        tail =  tail->prev;
+        tail->next = NULL;
+        free(temp);
     }
 }
 
 
 void new_apple(){
+    clear_pixel(apple_x, apple_y);
     apple_x = rand() % 64;
     apple_y = rand() % 48;
     while(apple_x == head->x && apple_y == head->y) {
@@ -105,6 +85,7 @@ void new_apple(){
 void apple_eat(){
     if((head->x == apple_x) && (head->y == apple_y)) {
         score ++;
+        printf("score: %i", score);
         apple_eaten = true;
     }
 }
@@ -171,70 +152,126 @@ void new_game(){
 }
 
 void draw_board(){
-    int i = 0;
     struct Node* temp = head;
-    while(temp != NULL ){
+    while(temp != NULL ) {
         pixel((temp->x), (temp->y)); // need the draw function
-        if((temp->x == apple_x) && (temp->y==apple_y)){
-            i = 1;
+        if ((temp->x == apple_x) && (temp->y == apple_y)) {
         }
         temp = temp->next;
     }
-    if (i == 0){
-         pixel(apple_x, apple_y); //need the draw function
-    }
+        pixel(apple_x, apple_y); //need the draw function
+
     display();
+}
+
+static void print_a() {
+
+    printf("A\n");
+    if( (direction == 1)){
+        direction = 3;
+    }
+    else if (direction == 3){
+        direction = 1;
+    }
+    else if (direction == 4){
+        direction = 2;
+    }
+    else{
+        direction = 4;
+    }
+
+}
+
+static void print_b() {
+
+    printf("B\n");
+    if( (direction == 2)){
+        direction = 3;
+    }
+    else if (direction == 4){
+        direction = 1;
+    }
+    else if (direction == 3){
+        direction = 2;
+    }
+    else{
+        direction = 4;
+    }
 }
 
 int main(){
     printf("Board started!\n");
+    extern uint16_t bpm;
+
+    nrfx_gpiote_in_config_t button_config = {
+            .sense = NRF_GPIOTE_POLARITY_HITOLO,
+            .pull = NRF_GPIO_PIN_PULLUP,
+            .hi_accuracy = 0
+    };
+
+    nrfx_gpiote_init();
+    nrfx_gpiote_in_init(14, &button_config, print_a);
+    nrfx_gpiote_in_init(23, &button_config, print_b);
+    nrfx_gpiote_in_event_enable(14, true);
+    nrfx_gpiote_in_event_enable(23, true);
+
+
 
     // Initialize I2C peripheral and driver
     nrf_drv_twi_config_t i2c_config = NRF_DRV_TWI_DEFAULT_CONFIG;
     i2c_config.scl = EDGE_P19;
     i2c_config.sda = EDGE_P20;
-    i2c_config.frequency = (nrf_drv_twi_frequency_t) NRF_TWIM_FREQ_100K;
+    i2c_config.frequency = (nrf_drv_twi_frequency_t) NRF_TWIM_FREQ_400K;
     i2c_config.interrupt_priority = 0;
     nrf_twi_mngr_init(&twi_mngr_instance, &i2c_config);
     oledtwi_init(&twi_mngr_instance, DISPLAY_ADDRESS);
 
     new_game();
-    app_timer_init(); // this needs to be moved
-    app_timer_create(&timer1, APP_TIMER_MODE_REPEATED, draw_board);
-    app_timer_start(timer1, 32768/5000, NULL);
+//    app_timer_init(); // this needs to be moved
+//    app_timer_create(&timer1, APP_TIMER_MODE_REPEATED, draw_board);
+//    app_timer_start(timer1, 32768/5000, NULL);
 
-    while(!lost){
-        if ((!nrf_gpio_pin_read(14)) || (!nrf_gpio_pin_read(23))){ // can maybe replace this with an interupt
-        cur_direction();
+    lost = false;
+    //int life = 500;
+    while(1){
+        draw_board();
+        if ((!nrf_gpio_pin_read(5)) || (!nrf_gpio_pin_read(11))){ // can maybe replace this with an interupt
         }
         lose();
         apple_eat();
-//        if (lost){
-//            struct Node* temp = head;
-//            while(temp != NULL){
-//                struct Node* other = temp->next;
-//                free(temp);
-//                temp = other;
-//            }
-//            printf("score: %i", score);
-//            nrf_delay_ms(30);
-//            new_game();
-//        }
-        moving();
+        if (lost){
+            struct Node* temp = head;
+            while(temp != NULL ) {
+                clear_pixel((temp->x), (temp->y)); // need the draw function
+                if ((temp->x == apple_x) && (temp->y == apple_y)) {
+                }
+                temp = temp->next;
+            }
+            struct Node* temp2 = head;
+            while(temp2 != NULL){
+                struct Node* other = temp2->next;
+                free(temp2);
+                temp2 = other;
+            }
+            printf("score: %i", score);
+            new_game();
+        }
+        move();
         if (apple_eaten){
             new_apple();
         }
 
-        int heart_beat_val = 75; // this needs to be replaced by the actual heart beat thing
-        nrf_delay_ms(500/heart_beat_val);
+        int heart_beat_val = bpm; // this needs to be replaced by the actual heart beat thing
+        nrf_delay_ms(75/heart_beat_val);
+        //life--;
+//        printf("%u", direction);
     }
-    printf("score: %i", score);
-    nrf_delay_ms(30);
-
-    struct Node* temp = head;
-    while(temp != NULL){
-        struct Node* other = temp->next;
-        free(temp);
-        temp = other;
-    }
+//    printf("score: %i", score);
+//    nrf_delay_ms(30);
+//
+//    struct Node* temp = head;
+//    while(temp != NULL){
+//        struct Node* other = temp->next;
+//        free(temp);
+//        temp = other;
 }
