@@ -22,7 +22,7 @@
 // Global variables
 // NRF_TWI_MNGR_DEF(twi_mngr_instance, 1, 0);
 
-int main(void) {
+int main_(void) {
     extern uint16_t bpm;
     printf("Board started!\n");
 

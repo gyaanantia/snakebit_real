@@ -7,7 +7,7 @@
 //
 //extern nrfx_lpcomp_event_handler_t event_handler_;
 
-uint16_t bpm;
+//extern uint16_t bpm;
 
 void heartbeat_setup(void);
 

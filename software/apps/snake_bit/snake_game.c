@@ -85,7 +85,7 @@ void new_apple(){
 void apple_eat(){
     if((head->x == apple_x) && (head->y == apple_y)) {
         score ++;
-        printf("score: %i", score);
+        printf("score: %i\n", score);
         apple_eaten = true;
     }
 }
@@ -166,15 +166,14 @@ void draw_board(){
 
 static void print_a() {
 
-    printf("A\n");
-    if( (direction == 1)){
+    if(direction == 1){
         direction = 3;
     }
     else if (direction == 3){
-        direction = 1;
+        direction = 2;
     }
     else if (direction == 4){
-        direction = 2;
+        direction = 1;
     }
     else{
         direction = 4;
@@ -184,15 +183,14 @@ static void print_a() {
 
 static void print_b() {
 
-    printf("B\n");
-    if( (direction == 2)){
+    if(direction == 2){
         direction = 3;
     }
     else if (direction == 4){
-        direction = 1;
+        direction = 2;
     }
     else if (direction == 3){
-        direction = 2;
+        direction = 1;
     }
     else{
         direction = 4;
@@ -200,8 +198,11 @@ static void print_b() {
 }
 
 int main(){
-    printf("Board started!\n");
     extern uint16_t bpm;
+
+    printf("Board started!\n");
+
+    heartbeat_setup();
 
     nrfx_gpiote_in_config_t button_config = {
             .sense = NRF_GPIOTE_POLARITY_HITOLO,
@@ -261,8 +262,10 @@ int main(){
             new_apple();
         }
 
-        int heart_beat_val = bpm; // this needs to be replaced by the actual heart beat thing
-        nrf_delay_ms(75/heart_beat_val);
+        if (bpm == 0) {
+            bpm = 60;
+        }
+        nrf_delay_ms((int) 75/(bpm*10));
         //life--;
 //        printf("%u", direction);
     }

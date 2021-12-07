@@ -17,6 +17,7 @@
 
 uint8_t counter;
 uint16_t avg_bpm;
+uint16_t bpm;
 APP_TIMER_DEF(heartbeat_timer);
 static nrfx_timer_t TIMER4 = NRFX_TIMER_INSTANCE(1);
 
