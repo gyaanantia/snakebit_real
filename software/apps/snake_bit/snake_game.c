@@ -10,11 +10,11 @@
 
 APP_TIMER_DEF(timer1);
 
-typedef uint_8_t score, apple_x, apple_y, direction;
+typedef uint8_t score, apple_x, apple_y, direction;
 typedef bool apple_eaten, lost;
 
 typedef struct Node{
-  uint_8_t x, y;
+  uint8_t x, y;
   struct Node* next;
   struct Node* prev;
 };
