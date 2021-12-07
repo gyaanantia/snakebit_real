@@ -185,7 +185,7 @@ void main(){
   apple_eat();
   if(lost){
   printf("score: %i", score);
-  nrf_delay_ms 30;
+  nrf_delay_ms(30);
   new_game();
 }
 moving();
