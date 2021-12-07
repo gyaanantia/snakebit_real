@@ -112,7 +112,7 @@ if((head->x<=0) ||  (head->y>= 63)){
 }
  struct Node* temp = head->next;
  while(temp!= tail ){
-    if head->x == temp->x {
+    if (head->x == temp->x) {
       if( head->y == temp->y){
      lost = true;
   }
