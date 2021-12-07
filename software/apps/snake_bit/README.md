@@ -1,5 +1,4 @@
-I2C Sensors App
+Snake:bit
 ===============
 
-Read data from the LSM303AGR accelerometer/magnetometer over I2C.
-
+Play Snake on the micro:bit with a qwiic OLED display and the built-in buttons
