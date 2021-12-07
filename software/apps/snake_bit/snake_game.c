@@ -87,11 +87,11 @@ void moving(){
 
 
 void new_apple(){
-  apple_x = rand()%65 + 32;
-  apple_y = rand()33%x + 16;
+  apple_x = rand()%65;
+  apple_y = rand()%49;
   while(apple_x== head->x && apple_y== head->y){
-    apple_x = rand()%65 + 32;
-    apple_y = rand()%33 + 16;
+    apple_x = rand()%65;
+    apple_y = rand()%49;
   }
   apple_eaten = false;
 }
@@ -104,7 +104,7 @@ void apple_eat(){
 }
 
 void lose(){
-if((head->y <= 0) ||  (head->y>=32)){
+if((head->y <= 0) ||  (head->y>=348)){
    lost = true;
 }
 if((head->x<=0) ||  (head->x>=64)){
@@ -136,15 +136,15 @@ void new_game(){
   five = malloc(sizeof(struct Node));
 
   one->x = 32;
-  one->y = 13;
+  one->y = 24;
   two->x = 32;
-  two->y = 14;
+  two->y = 25;
   three->x = 32;
-  three->y = 15;
+  three->y = 26;
   four->x = 32;
-  four->y = 16;
+  four->y = 27;
   five->x = 32;
-  five->y = 17;
+  five->y = 28;
 
   one->next = two;
   one->prev = NULL;
@@ -166,7 +166,7 @@ void new_game(){
 void draw_board(){
   struct Node* temp = head->next;
   while(temp!= tail ){
-    pixel((temp->x+32), (temp->y+)); // need the draw function
+    pixel((temp->x), (temp->y)); // need the draw function
     temp = temp -> next;
  }
  pixel(apple_x, apple_y); //need the draw function
