@@ -1,6 +1,5 @@
 
 #include <stdbool.h>
-#include "oled.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -8,6 +7,8 @@
 #include "nrf_delay.h"
 #include "app_timer.h"
 #include "microbit_v2.h"
+#include "oled.h"
+
 
 APP_TIMER_DEF(timer1);
 
@@ -30,26 +31,26 @@ struct Node* tail;
 
 void cur_direction(){
   if( (direction == 1) || (direction == 2) || (direction ==0)){
-    if(!gpio_read(14)){
+    if(!nrf_gpio_pin_read(14)){
        direction = 3; // turns right
     }
-    if(!gpio_read(23)){
+    if(!nrf_gpio_pin_read(23)){
        direction =4; // turns left
     }
   }
     else if(direction == 3){
-      if(!gpio_read(14)){
+      if(!nrf_gpio_pin_read(14)){
          direction = 1; // up
       }
-      if(!gpio_read(23)){
+      if(!nrf_gpio_pin_read(23)){
          direction = 2; //down
       }
     }
       else if(direction == 4){
-        if(!gpio_read(14)){
+        if(!nrf_gpio_pin_read(14)){
            direction = 2; //down
         }
-        if(!gpio_read(23)){
+        if(!nrf_gpio_pin_read(23)){
            direction = 1;// up
         }
       }
@@ -183,7 +184,7 @@ void draw_board(){
 void main(){
   new_game();
   while(1){
-  if ((!gpio_read(14)) | (!gpio_read(23))){ // can maybe replace this with an interupt
+  if ((!nrf_gpio_pin_read(14)) | (!nrf_gpio_pin_read(23))){ // can maybe replace this with an interupt
   cur_direction();
   }
   lose();
