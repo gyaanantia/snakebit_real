@@ -60,16 +60,16 @@ void lsm303agr_init(const nrf_twi_mngr_t* i2c) {
   // ---Initialize Accelerometer---
 
   // Reboot acclerometer
-  i2c_reg_write(LSM303AGR_ACC_ADDRESS, LSM303AGR_ACC_CTRL_REG5, 0x80);
+    i2c_write_byte(LSM303AGR_ACC_ADDRESS, LSM303AGR_ACC_CTRL_REG5, 0x80);
   nrf_delay_ms(100); // needs delay to wait for reboot
 
   // Enable Block Data Update
   // Only updates sensor data when both halves of the data has been read
-  i2c_reg_write(LSM303AGR_ACC_ADDRESS, LSM303AGR_ACC_CTRL_REG4, 0x80);
+    i2c_write_byte(LSM303AGR_ACC_ADDRESS, LSM303AGR_ACC_CTRL_REG4, 0x80);
 
   // Configure accelerometer at 100Hz, normal mode (10-bit)
   // Enable x, y and z axes
-  i2c_reg_write(LSM303AGR_ACC_ADDRESS, LSM303AGR_ACC_CTRL_REG1, 0x57);
+    i2c_write_byte(LSM303AGR_ACC_ADDRESS, LSM303AGR_ACC_CTRL_REG1, 0x57);
 
   // Read WHO AM I register
   // Always returns the same value if working
@@ -79,15 +79,15 @@ void lsm303agr_init(const nrf_twi_mngr_t* i2c) {
   // ---Initialize Magnetometer---
 
   // Reboot magnetometer
-  i2c_reg_write(LSM303AGR_MAG_ADDRESS, LSM303AGR_MAG_CFG_REG_A, 0x40);
+    i2c_write_byte(LSM303AGR_MAG_ADDRESS, LSM303AGR_MAG_CFG_REG_A, 0x40);
   nrf_delay_ms(100); // needs delay to wait for reboot
 
   // Enable Block Data Update
   // Only updates sensor data when both halves of the data has been read
-  i2c_reg_write(LSM303AGR_MAG_ADDRESS, LSM303AGR_MAG_CFG_REG_C, 0x10);
+    i2c_write_byte(LSM303AGR_MAG_ADDRESS, LSM303AGR_MAG_CFG_REG_C, 0x10);
 
   // Configure magnetometer at 100Hz, continuous mode
-  i2c_reg_write(LSM303AGR_MAG_ADDRESS, LSM303AGR_MAG_CFG_REG_A, 0x0C);
+    i2c_write_byte(LSM303AGR_MAG_ADDRESS, LSM303AGR_MAG_CFG_REG_A, 0x0C);
 
   // Read WHO AM I register
   result = i2c_reg_read(LSM303AGR_MAG_ADDRESS, LSM303AGR_MAG_WHO_AM_I_REG);
@@ -97,7 +97,7 @@ void lsm303agr_init(const nrf_twi_mngr_t* i2c) {
   // ---Initialize Temperature---
 
   // Enable temperature sensor
-  i2c_reg_write(LSM303AGR_ACC_ADDRESS, LSM303AGR_ACC_TEMP_CFG_REG, 0xC0);
+    i2c_write_byte(LSM303AGR_ACC_ADDRESS, LSM303AGR_ACC_TEMP_CFG_REG, 0xC0);
 }
 
 // Read the internal temperature sensor
