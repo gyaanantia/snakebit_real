@@ -18,7 +18,7 @@
 NRF_TWI_MNGR_DEF(twi_mngr_instance, 1, 0);
 APP_TIMER_DEF(my_timer_1);
 
-int notmain(void) {
+int main(void) {
   printf("Board started!\n");
 
   // Initialize I2C peripheral and driver
