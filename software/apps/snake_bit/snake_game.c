@@ -81,17 +81,17 @@ void moving(){
  if(!apple_eaten){
    struct Node* temp =  tail;
     tail =  tail->prev;
-   free(temp);// last element in list
+   free(temp);
  }
 }
 
 
 void new_apple(){
-  apple_x = rand()%65;
-  apple_y = rand()%33;
+  apple_x = rand()%65 + 32;
+  apple_y = rand()33%x + 16;
   while(apple_x== head->x && apple_y== head->y){
-    apple_x = rand()%65;
-    apple_y = rand()%33;
+    apple_x = rand()%65 + 32;
+    apple_y = rand()%33 + 16;
   }
   apple_eaten = false;
 }
@@ -104,10 +104,10 @@ void apple_eat(){
 }
 
 void lose(){
-if((head->y <= 0) ||  (head->y >=31)){
+if((head->y <= 0) ||  (head->y>=32)){
    lost = true;
 }
-if((head->x<=0) ||  (head->y>= 63)){
+if((head->x<=0) ||  (head->x>=64)){
    lost = true;
 }
  struct Node* temp = head->next;
@@ -121,8 +121,7 @@ if((head->x<=0) ||  (head->y>= 63)){
 }
 }
 void new_game(){
-  apple_x = rand()%65;
-  apple_y = rand()%33;
+  new_apple();
   direction = 0;
   struct Node* one = NULL;
   struct Node* two = NULL;
@@ -160,7 +159,6 @@ void new_game(){
 
   head = one;
   tail = five;
-  apple_eaten = false;
   lost = false;
 
 
@@ -168,22 +166,22 @@ void new_game(){
 void draw_board(){
   struct Node* temp = head->next;
   while(temp!= tail ){
-    draw(temp->x, temp->y); // need the draw function
+    pixel((temp->x+32), (temp->y+)); // need the draw function
     temp = temp -> next;
  }
- draw(apple_x, apple_y); //
+ pixel(apple_x, apple_y); //need the draw function
 
 }
 
 void main(){
   new_game();
   while(1){
-  if( !gpio_read(14) | !gpio_read(23)){ // can maybe replace this with an interupt
+  if ((!gpio_read(14)) | (!gpio_read(23))){ // can maybe replace this with an interupt
   cur_direction();
   }
   lose();
   apple_eat();
-  if(lost){
+  if (lost){
   printf("score: %i", score);
   nrf_delay_ms(30);
   new_game();
@@ -192,10 +190,10 @@ moving();
 if (apple_eaten){
   new_apple();
 }
-app_timer_init(); // this has to go somewhere else probably in the baord init or something
+app_timer_init(); // this needs to be moved
 app_timer_create(&timer1, APP_TIMER_MODE_REPEATED, draw_board);
 app_timer_start(timer1, 32768/500, NULL);
-int heart_beat_val = 75;
-nrf_delay_ms(1000/heart_beat_val); // this is def wrong but we'll get back to this
+int heart_beat_val = 75; // this needs to be replaced by the actual heart beat thing
+nrf_delay_ms(1000/heart_beat_val);
 }
 }
