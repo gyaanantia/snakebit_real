@@ -19,8 +19,8 @@ typedef struct Node{
   struct Node* prev;
 };
 
-typedef struct Node* head;
-typedef struct Node* tail;
+struct Node* head;
+struct Node* tail;
 
 //typedef struct {
 //  Node* head;
