@@ -10,8 +10,8 @@
 
 APP_TIMER_DEF(timer1);
 
-typedef uint8_t score, apple_x, apple_y, direction;
-typedef bool apple_eaten, lost;
+uint8_t score, apple_x, apple_y, direction;
+bool apple_eaten, lost;
 
 typedef struct Node{
   uint8_t x, y;
@@ -79,7 +79,7 @@ void moving(){
  }
  head = new_node;
  if(!apple_eaten){
-   Node* temp =  tail;
+   struct Node* temp =  tail;
     tail =  tail->prev;
    free(temp);// last element in list
  }
@@ -96,7 +96,7 @@ void new_apple(){
   apple_eaten = false;
 }
 
-void apple_eaten(head, apple){
+void apple_eaten(){
   if(head.x == apple_x && head.y == apple_y){
     score ++;
      apple_eaten = true;
