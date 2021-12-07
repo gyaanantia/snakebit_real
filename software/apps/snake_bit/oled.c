@@ -92,10 +92,10 @@ static void i2c_write_block(uint8_t i2c_addr, uint8_t control_byte, uint8_t* arr
         writeArr[j] = control_byte;
     }
 
-    for (int k = 0; k < size * 2; k++) {
-        printf("%x ", writeArr[k]);
-    }
-    printf("\n\n");
+//    for (int k = 0; k < size * 2; k++) {
+//        printf("%x ", writeArr[k]);
+//    }
+//    printf("\n\n");
 
     nrf_twi_mngr_transfer_t const write_transfer[] = {
             NRF_TWI_MNGR_WRITE(i2c_addr, writeArr, size * 2, 0)
@@ -217,7 +217,7 @@ void display()
         }
     }
 
-    print_screen();
+//    print_screen();
 }
 
 void pixel(int x, int y)
@@ -232,7 +232,7 @@ void pixel(int x, int y)
 
     int index = (int)(x + floor(y / 8) * LCDWIDTH_);
 
-    screenbuffer[index] ^= (1 << (y % 8));
+    screenbuffer[index] |= (1 << (y % 8));
 }
 
 void print_screen() {
