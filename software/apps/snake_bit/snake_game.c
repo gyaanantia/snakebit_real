@@ -1,5 +1,6 @@
 
 #include <stdbool.h>
+#include "oled.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -164,13 +165,19 @@ void new_game(){
 
 }
 void draw_board(){
-  struct Node* temp = head->next;
-  while(temp!= tail ){
+  int i = 0;
+  struct Node* temp = head;
+  while(temp != NULL ){
     pixel((temp->x), (temp->y)); // need the draw function
+    if((temp->x == apple_x) && (temp->y==apple_y)){
+      i = 1;
+    }
     temp = temp -> next;
  }
+ if (i=0){
  pixel(apple_x, apple_y); //need the draw function
-
+}
+ display();
 }
 
 void main(){
