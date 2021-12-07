@@ -17,7 +17,7 @@ static void lpcomp_event_handler(nrf_lpcomp_event_t event) {
 void heartbeat_setup() {
 
     nrf_lpcomp_config_t hal_ = {
-            .detection = NRF_LPCOMP_DETECT_UP,
+            .detection = NRF_LPCOMP_DETECT_CROSS,
             .reference = NRF_LPCOMP_REF_SUPPLY_4_8
     };
 
