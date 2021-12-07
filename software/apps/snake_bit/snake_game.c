@@ -28,7 +28,7 @@ struct Node* tail;
 //} List;
 
 void cur_direction(){
-  if( direction == 1 | direction == 2 | direction ==0){
+  if( (direction == 1) || (direction == 2) || (direction ==0)){
     if(!gpio_read(14)){
        direction = 3; // turns right
     }
@@ -97,17 +97,17 @@ void new_apple(){
 }
 
 void apple_eaten(){
-  if(head.x == apple_x && head.y == apple_y){
+  if((head->x == apple_x) && (head->y == apple_y)){
     score ++;
      apple_eaten = true;
   }
 }
 
 void lost(){
-if(head->y <= 0 ||  head->y >=31){
+if((head->y <= 0) ||  (head->y >=31)){
    lost = true;
 }
-if(head->x<=0 ||  head->y>= 63){
+if((head->x<=0) ||  (head->y>= 63)){
    lost = true;
 }
  Node* temp = head->next;
