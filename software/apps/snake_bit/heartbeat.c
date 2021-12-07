@@ -11,16 +11,14 @@
 #include "heartbeat.h"
 
 static void lpcomp_event_handler(nrf_lpcomp_event_t event) {
-    if(event == NRF_LPCOMP_EVENT_UP){
-        printf("Bing Bong!\n");
-    }
+    printf("Bing Bong!\n");
 }
 
 void heartbeat_setup() {
 
     nrf_lpcomp_config_t hal_ = {
             .detection = NRF_LPCOMP_DETECT_UP,
-            .reference = NRF_LPCOMP_REF_SUPPLY_7_8
+            .reference = NRF_LPCOMP_REF_SUPPLY_4_8
     };
 
     nrf_lpcomp_input_t input_ = NRF_LPCOMP_INPUT_3;
@@ -32,7 +30,9 @@ void heartbeat_setup() {
     };
 
     // initialize the LPCOMP driver
-    nrfx_lpcomp_init(&p_config_, lpcomp_event_handler);
+    nrfx_err_t error_code = nrfx_lpcomp_init(&p_config_, lpcomp_event_handler);
+
+    printf("nrfx_lpcomp_init is NRFX_SUCCESS: %d\n", error_code == NRFX_SUCCESS);
 
     // enable the LPCOMP peripheral and interrupts
     nrfx_lpcomp_enable();
