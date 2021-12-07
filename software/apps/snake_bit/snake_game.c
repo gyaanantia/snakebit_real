@@ -185,17 +185,17 @@ void main(){
   apple_eat();
   if(lost){
   printf("score: %i", score);
-  delay 20;
+  nrf_delay_ms 30;
   new_game();
 }
 moving();
-if (apple_eaten()){
+if (apple_eaten){
   new_apple();
 }
 app_timer_init(); // this has to go somewhere else probably in the baord init or something
 app_timer_create(&timer1, APP_TIMER_MODE_REPEATED, draw_board);
-app_timer_start(my_timer_1, 32768/500, NULL);
+app_timer_start(timer1, 32768/500, NULL);
 int heart_beat_val = 75;
-delay 1000/heart_beat_val; // this is def wrong but we'll get back to this
+nrf_delay_ms(1000/heart_beat_val); // this is def wrong but we'll get back to this
 }
 }
