@@ -96,21 +96,21 @@ void new_apple(){
   apple_eaten = false;
 }
 
-void apple_eaten(){
+void apple_eat(){
   if((head->x == apple_x) && (head->y == apple_y)){
     score ++;
      apple_eaten = true;
   }
 }
 
-void lost(){
+void lose(){
 if((head->y <= 0) ||  (head->y >=31)){
    lost = true;
 }
 if((head->x<=0) ||  (head->y>= 63)){
    lost = true;
 }
- Node* temp = head->next;
+ struct Node* temp = head->next;
  while(temp!= tail ){
     if head->x == temp->x {
       if( head->y == temp->y){
@@ -161,7 +161,7 @@ void new_game(){
   head = one;
   tail = five;
   apple_eaten = false;
-  loss = false;
+  lost = false;
 
 
 }
@@ -177,13 +177,12 @@ void draw_board(){
 
 void main(){
   new_game();
-  app_
   while(1){
   if( !gpio_read(14) | !gpio_read(23)){ // can maybe replace this with an interupt
   cur_direction();
   }
-  lost();
-  apple_eaten();
+  lose();
+  apple_eat();
   if(lost){
   printf("score: %i", score);
   delay 20;
