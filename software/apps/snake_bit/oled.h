@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nrf_twi_mngr.h"
+#include <nrf_twi_mngr.h>
 #include <math.h>
 
 static const uint8_t PAGE = 0;
@@ -42,4 +42,16 @@ static const uint8_t DISPLAY_READ_0 = 0x79;
 static const uint8_t DISPLAY_WRITE_1 = 0x7A;
 static const uint8_t DISPLAY_READ_1 = 0x7B;
 
-void oledtwi_init(void);
+void oledtwi_init(const nrf_twi_mngr_t* i2c, uint8_t address);
+
+void clear(uint8_t mode, uint8_t address);
+
+void set_page_address(uint8_t pageAddress);
+
+void set_column_address(uint8_t colAddress);
+
+void display(void);
+
+void pixel(int x, int y);
+
+void print_screen();
