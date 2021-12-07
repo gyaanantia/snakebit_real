@@ -7126,14 +7126,14 @@
 
 
 #ifndef RTC0_ENABLED
-#define RTC0_ENABLED 0
+#define RTC0_ENABLED 1
 #endif
 
 // <q> RTC1_ENABLED  - Enable RTC1 instance
 
 
 #ifndef RTC1_ENABLED
-#define RTC1_ENABLED 0
+#define RTC1_ENABLED 1
 #endif
 
 // <q> RTC2_ENABLED  - Enable RTC2 instance
