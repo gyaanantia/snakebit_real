@@ -109,6 +109,7 @@ void lose(){
 }
 
 void new_game(){
+    score = 0;
     new_apple();
     direction = 1;
     struct Node* one = NULL;
@@ -236,8 +237,6 @@ int main(){
     //int life = 500;
     while(1){
         draw_board();
-        if ((!nrf_gpio_pin_read(5)) || (!nrf_gpio_pin_read(11))){ // can maybe replace this with an interupt
-        }
         lose();
         apple_eat();
         if (lost){
@@ -254,7 +253,7 @@ int main(){
                 free(temp2);
                 temp2 = other;
             }
-            printf("score: %i", score);
+            printf("score: %i\n", score);
             new_game();
         }
         move();
@@ -265,7 +264,8 @@ int main(){
         if (bpm == 0) {
             bpm = 60;
         }
-        nrf_delay_ms((int) 75/(bpm*10));
+        nrf_delay_ms((int) 75/(bpm));
+        // printf("bpm: %u\n", bpm);
         //life--;
 //        printf("%u", direction);
     }
