@@ -12,7 +12,7 @@
 
 static void lpcomp_event_handler(nrf_lpcomp_event_t event) {
     if(event == NRF_LPCOMP_EVENT_UP){
-        printf("Bing Bong!");
+        printf("Bing Bong!\n");
     }
 }
 
@@ -31,11 +31,11 @@ void heartbeat_setup() {
             .interrupt_priority = 1
     };
 
-    // enable the LPCOMP peripheral and interrupts
-    nrfx_lpcomp_enable();
-
     // initialize the LPCOMP driver
     nrfx_lpcomp_init(&p_config_, lpcomp_event_handler);
+
+    // enable the LPCOMP peripheral and interrupts
+    nrfx_lpcomp_enable();
 
 }
 
