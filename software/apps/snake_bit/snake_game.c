@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdlib. h>
+#include <stdlib.h>
 #include "nrf_gpio.h"
 #include "nrf_delay.h"
 #include "app_timer.h"
